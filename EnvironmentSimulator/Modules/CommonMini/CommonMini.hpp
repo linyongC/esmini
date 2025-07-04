@@ -926,8 +926,8 @@ public:
           isSingleValueOption_(isSingleValueOption)
     {
     }
-
-    void Usage() const;
+    // const修饰类的成员函数，表明该函数不会修改类的任何数据成员（即“只读”操作）
+    void Usage() const; // 1)函数内禁止修改类的非静态成员变量;2)若对象被声明为const，则只能调用其 const 成员函数
 };
 
 class SE_Options
@@ -936,7 +936,7 @@ class SE_Options
 
 public:
     void AddOption(std::string opt_str,
-                   std::string opt_desc,
+                   std::string opt_desc,    // description of the option
                    std::string opt_arg             = "",
                    std::string default_value       = "",
                    bool        autoApply           = false,

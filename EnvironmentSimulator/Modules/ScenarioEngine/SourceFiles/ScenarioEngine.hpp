@@ -204,7 +204,7 @@ namespace scenarioengine
 
         // execution control flags
         unsigned int frame_nr_;
-        int          init_status_;
+        int          init_status_;  // InitScenario status
 
         int parseScenario();
     };

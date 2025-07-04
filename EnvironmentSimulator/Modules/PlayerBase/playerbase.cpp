@@ -160,7 +160,7 @@ void ScenarioPlayer::SetOSIFileStatus(bool is_on, const char* filename)
 #endif  // _USE_OSI
 }
 
-void ScenarioPlayer::Draw()
+void ScenarioPlayer::Draw() // 绘制画面
 {
     if (viewer_)
     {
@@ -169,7 +169,7 @@ void ScenarioPlayer::Draw()
         {
             if (!viewer_->GetQuitRequest())
             {
-                ViewerFrame();
+                ViewerFrame(); // 绘制画面
             }
 
             if (viewer_->GetQuitRequest())
@@ -199,7 +199,7 @@ int ScenarioPlayer::Frame(double timestep_s, bool server_mode)
         scenarioEngine->mutex_.Lock();
         retval = ScenarioFrame(timestep_s, true);
 
-        if (SE_Env::Inst().GetGhostMode() != GhostMode::NORMAL)
+        if (SE_Env::Inst().GetGhostMode() != GhostMode::NORMAL) // 针对GhostMode的处理
         {
             while (retval == 0 && SE_Env::Inst().GetGhostMode() != GhostMode::NORMAL && !IsQuitRequested())
             {
@@ -333,7 +333,7 @@ void ScenarioPlayer::ScenarioPostFrame()
 }
 
 #ifdef _USE_OSG
-void ScenarioPlayer::ViewerFrame(bool init)
+void ScenarioPlayer::ViewerFrame(bool init) // 主要绘制画面的函数
 {
     if (viewer_ == nullptr)
     {
@@ -466,7 +466,7 @@ void ScenarioPlayer::ViewerFrame(bool init)
                 entity->trail_->AddPoint(obj->pos_.GetX(), obj->pos_.GetY(), obj->pos_.GetZ() + (obj->GetId() + 1) * TRAIL_Z_OFFSET);
             }
 
-            // on screen text following each entity
+            // on screen text following each entity 
             snprintf(entity->on_screen_info_.string_,
                      sizeof(entity->on_screen_info_.string_),
                      " %s (%d) %.2fm\n %.2fkm/h road %d lane %d/%.2f s %.2f\n x %.2f y %.2f hdg %.2f\n osi x %.2f y %.2f \n|",
@@ -497,7 +497,7 @@ void ScenarioPlayer::ViewerFrame(bool init)
         {
             Object* obj = scenarioEngine->entities_.object_[static_cast<unsigned int>(viewer_->currentCarInFocus_)];
             snprintf(str_buf,
-                     sizeof(str_buf),
+                     sizeof(str_buf), // info
                      "%.2fs entity[%d]: %s (%d) %.2fkm/h %.2fm (%d, %d, %.2f, %.2f) / (%.2f, %.2f %.2f)",
                      scenarioEngine->getSimulationTime(),
                      viewer_->currentCarInFocus_,
@@ -1028,7 +1028,7 @@ int ScenarioPlayer::InitViewer()
         viewer_->SetVehicleInFocus(0);
     }
 
-    // Decorate window border with application name and arguments
+    // Decorate window border with application name and arguments 
     viewer_->SetWindowTitleFromArgs(opt.GetOriginalArgs());
     viewer_->RegisterKeyEventCallback(ReportKeyEvent, this);
 
@@ -1326,7 +1326,7 @@ int ScenarioPlayer::Init()
                   "Decide how the static data should be reported, 0=Default (first frame), 1=API (expose on API) 2=API_AND_LOG (Always log)",
                   "mode",
                   "0");
-#endif
+#endif  // 根据参数分布文件运行场景的多种变体;  从参数分布生成的排列组合中按索引运行特定实例
     opt.AddOption("param_dist", "Run variations of the scenario according to specified parameter distribution file", "filename");
     opt.AddOption("param_permutation", "Run specific permutation of parameter distribution, index in range (0 .. NumberOfPermutations-1)", "index");
     opt.AddOption("pause", "Pause simulation after initialization");
@@ -1356,7 +1356,7 @@ int ScenarioPlayer::Init()
     opt.AddOption("version", "Show version and quit");
 
     if (int ret = OnRequestShowHelpOrVersion(argc_, argv_, opt); ret > 0)
-    {
+    {   // C++17 引入的 ‌带初始化的 if 语句‌（init-if）；return 1 for help, 2 for version, 3 for both else return 0
         return ret;
     }
 
@@ -1375,6 +1375,8 @@ int ScenarioPlayer::Init()
     config.LogLoadedConfigFiles();
 
     std::string strAllSetOptions = opt.GetSetOptionsAsStr();
+    printf("\n######################################\n");
+    printf("strAllSetOptions: %s\n",strAllSetOptions);
 
     std::string logFilePathOptionValue = TxtLogger::Inst().CreateLogFilePath();
     if (opt.IsOptionArgumentSet("param_dist"))
@@ -1407,7 +1409,7 @@ int ScenarioPlayer::Init()
     TxtLogger::Inst().SetLoggersVerbosity();
     OSCParameterDistribution& dist = OSCParameterDistribution::Inst();
 
-    if (dist.GetNumPermutations() > 0)
+    if (dist.GetNumPermutations() > 0) // 所有参数的排列组合
     {
         LOG_INFO("Re-using parameter distribution {}", dist.GetFilename());
     }

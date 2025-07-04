@@ -149,6 +149,8 @@ void ScenarioEngine::UpdateGhostMode()
 int ScenarioEngine::step(double deltaSimTime)
 {
     UpdateGhostMode();
+    // printf("----------current frame_nr: %d; simulationTime: %.3f\n",frame_snr_,simulationTime_);
+    // printf("----------current simulationTime: %.6f\n",simulationTime_);        
 
     if (frame_nr_ == 0)
     {
@@ -589,7 +591,7 @@ int ScenarioEngine::parseScenario()
     SetSimulationTime(0);
     SetTrueTime(0);
 
-    scenarioReader->LoadControllers();
+    scenarioReader->LoadControllers();// 注册所有的controller
 
     scenarioReader->SetGateway(&scenarioGateway);
     scenarioReader->SetScenarioEngine(this);
@@ -648,7 +650,7 @@ int ScenarioEngine::parseScenario()
             {
                 located = true;
                 if (roadmanager::Position::LoadOpenDrive(file_name_candidates[i].c_str()) == true)
-                {
+                {   // ./resources/xosc/../xodr/soderleden.xodr
                     LOG_INFO("Loaded OpenDRIVE: {}", file_name_candidates[i]);
                     break;
                 }

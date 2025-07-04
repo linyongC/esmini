@@ -2,6 +2,7 @@
 build*/*
 /bin/
 /code-examples-bin/
+/cly
 *.swp
 *~
 *.pdb
@@ -26,7 +27,7 @@ externals/implot
 resources/models
 Hello-World_coding-example/build
 .pyenv
-.vscode
+# .vscode
 test/OSC-ALKS-scenarios
 test/stdout.txt
 __pycache__

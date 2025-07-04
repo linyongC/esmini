@@ -1889,7 +1889,7 @@ std::vector<OSCPrivateAction*> Object::getPrivateActions()
     return actions;
 }
 
-Object* Object::TowVehicle()
+Object* Object::TowVehicle() // 拖车+挂车情况下，拖车存在trailer_coupler和trailer_hitch时，正常返回拖车
 {
     Vehicle* tow_vehicle = nullptr;
 

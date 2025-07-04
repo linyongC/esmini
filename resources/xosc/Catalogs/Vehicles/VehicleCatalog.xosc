@@ -46,7 +46,7 @@
             </Properties>
         </Vehicle>
 
-       <Vehicle name="car_blue" vehicleCategory="car" model3d="../models/car_blue.osgb">
+        <Vehicle name="car_blue" vehicleCategory="car" model3d="../models/car_blue.osgb">
             <!-- model bounding box xyz: 1.46, 0.00, 0.77 lwh: 5.04, 2.04, 1.49 -->
             <ParameterDeclarations>
                 <ParameterDeclaration name="DimX" parameterType="double" value="4.5"/>

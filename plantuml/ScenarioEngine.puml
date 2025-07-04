@@ -1,0 +1,122 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+namespace scenarioengine {
+	class ScenarioEngine {
+		+ScenarioEngine(std::string oscFilename, bool disable_controllers)
+		+ScenarioEngine(const pugi::xml_document& xml_doc, bool disable_controllers)
+		+~ScenarioEngine()
+		-catalogs : Catalogs
+		+entities_ : Entities
+		-ghost_ : Object*
+		-roadNetwork : RoadNetwork
+		+mutex_ : SE_Mutex
+		-scenarioGateway : ScenarioGateway
+		+getScenarioGateway() : ScenarioGateway*
+		+GetScenarioReader() : ScenarioReader*
+		+scenarioReader : ScenarioReader*
+		+storyBoard : StoryBoard
+		-sumotemplate : Vehicle
+		+GetDisableControllersFlag() : bool {query}
+		+GetQuitFlag() : bool {query}
+		-disable_controllers_ : bool
+		+doOnce : bool
+		+GetTrueTime() : double {query}
+		+getSimulationTime() : double {query}
+		-simulationTime_ : double
+		+trueTime_ : double
+		+GetSimulationTimePtr() : double*
+		+GetTrueTimePtr() : double*
+		+DetectCollisions() : int
+		+GetDistance(Object* object_1, Object* object_2, roadmanager::RelativeDistanceType dist_type, const double tracking_limit, double* distance, double* timestamp) : int
+		+GetInitStatus() : int {query}
+		+InitScenario(std::string oscFilename, bool disable_controllers) : int
+		+InitScenario(const pugi::xml_document& xml_doc, bool disable_controllers) : int
+		+UpdateDistance(Object* obj_1, Object* obj_2, roadmanager::RelativeDistanceType& dist_type, const uint64_t& key, const uint64_t& rev_key, const double tracking_limit) : int
+		+defaultController(Object* obj, double dt) : int
+		-init_status_ : int
+		-parseScenario() : int
+		+step(double deltaSimTime) : int
+		+getRoadManager() : roadmanager::OpenDrive*
+		-odrManager : roadmanager::OpenDrive*
+		+getOdrFilename() : std::string {query}
+		+getScenarioFilename() : std::string {query}
+		+getSceneGraphFilename() : std::string {query}
+		-object_distance_map_ : std::unordered_map<uint64_t, DistanceEntry>
+		+collision_pair_ : std::vector<CollisionPair>
+		+injected_actions_ : std::vector<OSCAction*>*
+		-GenerateKey(int id1, int id2) : uint64_t {query}
+		-frame_nr_ : unsigned int
+		+CreateGhostTeleport(Object* obj1, Object* obj2, Event* event) : void
+		+EraseCleanParams() : void
+		+EraseCleanVariables() : void
+		+GetIdxsFromIds(const int id_1, const int id_2, int& idx_1, int& idx_2) : void
+		+InitScenarioCommon(bool disable_controllers) : void
+		+ParseGlobalDeclarations() : void
+		+ReplaceObjectInTrigger(Trigger* trigger, Object* obj1, Object* obj2, double timeOffset, Event* event) : void
+		+ResetEvents() : void {query}
+		+SetInjectedActionsPtr(std::vector<OSCAction*>* injected_actions) : void
+		+SetOSIReporter(OSIReporter* osi_reporter) : void
+		+SetSimulationTime(double time) : void
+		+SetTrueTime(double time) : void
+		+SetupGhost(Object* object) : void
+		+UpdateGhostMode() : void
+		+prepareGroundTruth(double dt) : void
+		+printSimulationTime() : void
+	}
+
+	class CallBack {
+		+func : ParamDeclCallbackFunc
+		+data : void*
+	}
+
+	class CollisionPair {
+		+object0 : Object*
+		+object1 : Object*
+	}
+
+	class ScenarioEngine::DistanceEntry {
+		+next_update_ : double
+		+>(roadmanager::RelativeDistanceType::ENUM_SIZE) : std::array<DistanceMeasurement , static_cast<size_t
+	}
+
+	class ScenarioEngine::DistanceMeasurement {
+		+distance_ : double
+		+timestamp_ : double
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+scenarioengine.ScenarioEngine *-- scenarioengine.CollisionPair
+
+
+
+
+
+
+/' Nested objects '/
+
+scenarioengine.ScenarioEngine +-- scenarioengine.ScenarioEngine.DistanceEntry
+
+
+scenarioengine.ScenarioEngine +-- scenarioengine.ScenarioEngine.DistanceMeasurement
+
+
+
+
+@enduml

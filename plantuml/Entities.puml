@@ -1,0 +1,472 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+namespace scenarioengine {
+	class Entities {
+		+Entities()
+		+~Entities()
+		+GetObjectById(int id) : Object*
+		+GetObjectByName(std::string name) : Object*
+		+indexExists(int id) : bool {query}
+		+nameExists(std::string name) : bool {query}
+		+GetObjectIdxById(int id) : int
+		+activateObject(Object* obj, int call_index) : int
+		+addObject(Object* obj, bool activate, int call_index) : int
+		+deactivateObject(Object* obj, int call_index) : int
+		+getNewId() : int
+		-nextId_ : int
+		+object_ : std::vector<Object*>
+		+object_pool_ : std::vector<Object*>
+		+removeObject(int id, bool recursive) : void
+		+removeObject(std::string name, bool recursive) : void
+		+removeObject(Object* object, bool recursive) : void
+	}
+
+	class MiscObject {
+		+MiscObject()
+		+mass_ : double
+		+{static} Category2String(int category) : std::string
+		+SetCategory(std::string category) : void
+	}
+
+	class Object {
+		+Object(Type type)
+		+Object(const Object& o)
+		+~Object()
+		+state_old : <anon-struct-3>
+		+front_axle_ : Axle
+		+rear_axle_ : Axle
+		+GetAssignedControllerOftype(Controller::Type type) : Controller*
+		+GetController(std::string name) : Controller*
+		+GetControllerActiveOnDomain(ControlDomains domain) : Controller*
+		+GetControllerActiveOnDomainMask(ControlDomainMasks domain_mask) : Controller*
+		+GetControllerTypeActiveOnDomain(ControlDomains domain) : Controller::Type
+		+scaleMode_ : EntityScaleMode
+		+boundingbox_ : OSCBoundingBox
+		+properties_ : OSCProperties
+		+GetGhost() : Object*
+		+TowVehicle() : Object*
+		+TrailerVehicle() : Object*
+		+ghost_ : Object*
+		+ghost_Ego_ : Object*
+		+overrideActionList : OverrideActionStatus[]
+		+performance_ : Performance
+		+type_ : Type
+		+CheckDirtyBits(int bits) : bool {query}
+		+Collision(Object* target) : bool
+		+CollisionAndRelativeDistLatLong(Object* target, double* distLat, double* distLong) : bool
+		+IsActive() : bool {query}
+		+IsAnyActiveControllerOfType(Controller::Type type) : bool
+		+IsAnyAssignedControllerOfType(Controller::Type type) : bool
+		+IsControllerActiveOnAnyOfDomains(unsigned int domainMask, Controller::Type type) : bool
+		+IsControllerActiveOnDomains(unsigned int domainMask, Controller::Type type) : bool
+		+IsControllerModeOnAnyOfDomains(ControlOperationMode mode, unsigned int domainMask, Controller::Type type) : bool
+		+IsControllerModeOnDomains(ControlOperationMode mode, unsigned int domainMask, Controller::Type type) : bool
+		+IsEndOfRoad() : bool {query}
+		+IsGhost() : bool {query}
+		+IsOffRoad() : bool {query}
+		+IsStandStill() : bool {query}
+		+containsEvent(Event* event) : bool
+		+isGhost_ : bool
+		-is_active_ : bool
+		+reset_ : bool
+		+FreeSpaceDistance(Object* target, double* latDist, double* longDist) : double
+		+FreeSpaceDistancePoint(double x, double y, double* latDist, double* longDist) : double
+		+GetEndOfRoadTimestamp() : double {query}
+		+GetHeadstartTime() : double {query}
+		+GetJunctionSelectorAngle() : double {query}
+		+GetMaxAcceleration() : double {query}
+		+GetMaxDeceleration() : double {query}
+		+GetMaxSpeed() : double {query}
+		+GetOffRoadTimestamp() : double {query}
+		+GetSpeed() : double {query}
+		+GetStandStillTimestamp() : double {query}
+		+PointCollision(double x, double y) : double
+		+end_of_road_timestamp_ : double
+		+headstart_time_ : double
+		+nextJunctionSelectorAngle_ : double
+		+odometer_ : double
+		+off_road_timestamp_ : double
+		+speed_ : double
+		+stand_still_timestamp_ : double
+		+wheel_angle_ : double
+		+wheel_rot_ : double
+		+sensor_pos_ : double[]
+		+trail_follow_index_ : idx_t
+		+Distance(Object* target, roadmanager::CoordinateSystem cs, roadmanager::RelativeDistanceType relDistType, bool freeSpace, double& dist, double maxDist) : int
+		+Distance(double x, double y, roadmanager::CoordinateSystem cs, roadmanager::RelativeDistanceType relDistType, bool freeSpace, double& dist, double maxDist) : int
+		+FreeSpaceDistanceObjectRoadLane(Object* target, roadmanager::PositionDiff* posDiff, roadmanager::CoordinateSystem cs) : int
+		+FreeSpaceDistancePointRoadLane(double x, double y, double* latDist, double* longDist, roadmanager::CoordinateSystem cs) : int
+		+GetDirtyBitMask() : int {query}
+		+GetId() : int {query}
+		+GetType() : int {query}
+		+OverlappingFront(Object* target, double tolerance) : int
+		+TimeHeadway(Object* target, roadmanager::CoordinateSystem cs, roadmanager::RelativeDistanceType relDistType, bool freeSpace, double& thw, double maxDist) : int
+		+category_ : int
+		-dirty_ : int
+		+ghost_trail_s_ : int
+		+id_ : int
+		+model_id_ : int
+		+role_ : int
+		+visibilityMask_ : int
+		+GetJunctionSelectorStrategy() : roadmanager::Junction::JunctionStrategyType {query}
+		+junctionSelectorStrategy_ : roadmanager::Junction::JunctionStrategyType
+		+trail_ : roadmanager::PolyLineBase
+		+pos_ : roadmanager::Position
+		+MoveAlongS(double ds, bool actualDistance) : roadmanager::Position::ReturnCode
+		+trail_closest_pos_ : roadmanager::TrajVertex
+		+GetModelFileName() : std::string
+		+GetModelFilePath() : std::string {query}
+		+GetName() : std::string {query}
+		+GetTypeName() : std::string {query}
+		+{static} Role2String(int role) : std::string
+		+{static} Type2String(int type) : std::string
+		+model3d_ : std::string
+		+name_ : std::string
+		+typeName_ : std::string
+		+controllers_ : std::vector<Controller*>
+		+getEvents() : std::vector<Event*>
+		+objectEvents_ : std::vector<Event*>
+		+getPrivateActions() : std::vector<OSCPrivateAction*>
+		+initActions_ : std::vector<OSCPrivateAction*>
+		+collisions_ : std::vector<Object*>
+		+GetNrOfAssignedControllers() : unsigned int {query}
+		+AssignController(Controller* controller) : void
+		+ClearDirtyBits(int bits) : void
+		+ClearDirtyBits() : void
+		+SetAcc(double x_acc, double y_acc, double z_acc) : void
+		+SetActive(bool active) : void
+		+SetAngularAcc(double h_acc, double p_acc, double r_acc) : void
+		+SetAngularVel(double h_vel, double p_vel, double r_vel) : void
+		+SetDirty(int bitmask) : void
+		+SetDirtyBits(int bits) : void
+		+SetEndOfRoad(bool state, double time) : void
+		+SetGhost(Object* ghost) : void
+		+SetHeadstartTime(double headstartTime) : void
+		+SetJunctionSelectorAngle(double angle) : void
+		+SetJunctionSelectorAngleRandom() : void
+		+SetJunctionSelectorStrategy(roadmanager::Junction::JunctionStrategyType type) : void
+		+SetMaxAcceleration(double maxAcceleration) : void
+		+SetMaxDeceleration(double maxDeceleration) : void
+		+SetMaxSpeed(double maxSpeed) : void
+		+SetOffRoad(bool state, double time) : void
+		+SetRole(std::string role) : void
+		+SetSensorPosition(double x, double y, double z) : void
+		+SetSpeed(double speed) : void
+		+SetStandStill(bool state, double time) : void
+		+SetVel(double x_vel, double y_vel, double z_vel) : void
+		+SetVisibilityMask(int mask) : void
+		+UnassignController(Controller* controller) : void
+		+UnassignControllers() : void
+		+addEvent(Event* event) : void
+		+removeEvent(Event* event) : void
+	}
+
+	class Pedestrian {
+		+Pedestrian()
+		+mass_ : double
+		+{static} Category2String(int category) : std::string
+		+SetCategory(std::string category) : void
+	}
+
+	class Vehicle {
+		+Vehicle()
+		+Vehicle(const Vehicle& v)
+		+~Vehicle()
+		+operator=(const Vehicle &) : Vehicle&
+		+ConnectTrailer(Vehicle* trailer) : int
+		+DisconnectTrailer() : int
+		+trailer_coupler_ : std::shared_ptr<TrailerCoupler>
+		+trailer_hitch_ : std::shared_ptr<TrailerHitch>
+		+{static} Category2String(int category) : std::string
+		+wheel_data : std::vector<WheelData>
+		+GetWheelData() : std::vector<WheelData>&
+		+AlignTrailers() : void
+		+SetCategory(std::string category) : void
+		+SetWheelData() : void
+	}
+
+	class Vehicle::TrailerCoupler {
+		+TrailerCoupler(double dx, Object* tow_vehicle)
+		+TrailerCoupler()
+		+TrailerCoupler(TrailerCoupler &)
+		+tow_vehicle_ : Object*
+		+dx_ : double
+	}
+
+	class Vehicle::TrailerHitch {
+		+TrailerHitch(double dx)
+		+TrailerHitch(TrailerHitch &)
+		+TrailerHitch()
+		+trailer_vehicle_ : Object*
+		+dx_ : double
+	}
+
+	enum MiscObject::Category {
+		BARRIER
+		BUILDING
+		CROSSWALK
+		GANTRY
+		NONE
+		OBSTACLE
+		PARKINGSPACE
+		PATCH
+		POLE
+		RAILING
+		ROADMARK
+		SOUNDBARRIER
+		STREETLAMP
+		TRAFFICISLAND
+		TREE
+		VEGETATION
+		WIND
+	}
+
+	enum Object::DirtyBit {
+		ACCELERATION
+		ALIGN_MODE_H_SET
+		ALIGN_MODE_H_UPDATE
+		ALIGN_MODE_P_SET
+		ALIGN_MODE_P_UPDATE
+		ALIGN_MODE_R_SET
+		ALIGN_MODE_R_UPDATE
+		ALIGN_MODE_Z_SET
+		ALIGN_MODE_Z_UPDATE
+		ANGULAR_ACC
+		ANGULAR_RATE
+		CONTROLLER
+		FRICTION
+		LATERAL
+		LONGITUDINAL
+		NONE
+		ROUTE
+		SPEED
+		TELEPORT
+		VELOCITY
+		VISIBILITY
+		WHEEL_ANGLE
+		WHEEL_ROTATION
+	}
+
+	enum Object::OverlapType {
+		FULL
+		INSIDE
+		INSIDE_AND_FULL
+		NONE
+		PART
+	}
+
+	enum Object::OverrideBrakeType {
+		Force
+		Percent
+	}
+
+	enum Object::OverrideGearType {
+		Automatic
+		Manual
+	}
+
+	enum Object::OverrideType {
+		OVERRIDE_BRAKE
+		OVERRIDE_CLUTCH
+		OVERRIDE_GEAR
+		OVERRIDE_NR_TYPES
+		OVERRIDE_PARKING_BRAKE
+		OVERRIDE_STEERING_WHEEL
+		OVERRIDE_THROTTLE
+		OVERRIDE_UNDEFINED
+	}
+
+	enum Object::Role {
+		AMBULANCE
+		CIVIL
+		FIRE
+		MILITARY
+		NONE
+		POLICE
+		PUBLIC_TRANSPORT
+		ROAD_ASSISTANCE
+	}
+
+	enum Object::Type {
+		MISC_OBJECT
+		N_OBJECT_TYPES
+		PEDESTRIAN
+		TYPE_NONE
+		VEHICLE
+	}
+
+	enum Object::Visibility {
+		GRAPHICS
+		SENSORS
+		TRAFFIC
+	}
+
+	enum Pedestrian::Category {
+		ANIMAL
+		PEDESTRIAN
+		WHEELCHAIR
+	}
+
+	enum Vehicle::Category {
+		BICYCLE
+		BUS
+		CAR
+		MOTORBIKE
+		SEMITRAILER
+		TRAILER
+		TRAIN
+		TRAM
+		TRUCK
+		VAN
+	}
+
+	class Axle {
+		+maxSteering : double
+		+positionX : double
+		+positionZ : double
+		+trackWidth : double
+		+wheelDiameter : double
+	}
+
+	class Object::OverrideActionStatus {
+		+active : bool
+		+maxRate : double
+		+maxTorque : double
+		+value : double
+		+number : int
+		+type : int
+		+value_type : int
+	}
+
+	class Object::anon_struct_3 {
+		+h : double
+		+h_rate : double
+		+pos_x : double
+		+pos_y : double
+		+pos_z : double
+		+vel_x : double
+		+vel_y : double
+		+vel_z : double
+	}
+
+	class Performance {
+		+maxAcceleration : double
+		+maxDeceleration : double
+		+maxSpeed : double
+	}
+
+	class WheelData {
+		+friction_coefficient : double
+		+h : double
+		+p : double
+		+rotation_rate : double
+		+wheel_radius : double
+		+x : double
+		+y : double
+		+z : double
+		+axle : int
+		+index : int
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+scenarioengine.Object <|-- scenarioengine.MiscObject
+
+
+scenarioengine.Object <|-- scenarioengine.Pedestrian
+
+
+scenarioengine.Object <|-- scenarioengine.Vehicle
+
+
+
+
+
+/' Aggregation relationships '/
+
+scenarioengine.Entities "2" o-- scenarioengine.Object
+
+
+scenarioengine.Object "2" *-- scenarioengine.Axle
+
+
+scenarioengine.Object "3" o-- scenarioengine.Object
+
+
+scenarioengine.Object *-- scenarioengine.Performance
+
+
+scenarioengine.Vehicle *-- scenarioengine.WheelData
+
+
+scenarioengine.Vehicle::TrailerCoupler o-- scenarioengine.Object
+
+
+scenarioengine.Vehicle::TrailerHitch o-- scenarioengine.Object
+
+
+
+
+
+
+/' Nested objects '/
+
+scenarioengine.MiscObject +-- scenarioengine.MiscObject.Category
+
+
+scenarioengine.Object +-- scenarioengine.Object.DirtyBit
+
+
+scenarioengine.Object +-- scenarioengine.Object.OverlapType
+
+
+scenarioengine.Object +-- scenarioengine.Object.OverrideActionStatus
+
+
+scenarioengine.Object +-- scenarioengine.Object.OverrideBrakeType
+
+
+scenarioengine.Object +-- scenarioengine.Object.OverrideGearType
+
+
+scenarioengine.Object +-- scenarioengine.Object.OverrideType
+
+
+scenarioengine.Object +-- scenarioengine.Object.Role
+
+
+scenarioengine.Object +-- scenarioengine.Object.Type
+
+
+scenarioengine.Object +-- scenarioengine.Object.Visibility
+
+
+scenarioengine.Object +-- scenarioengine.Object.anon_struct_3
+
+
+scenarioengine.Pedestrian +-- scenarioengine.Pedestrian.Category
+
+
+scenarioengine.Vehicle +-- scenarioengine.Vehicle.Category
+
+
+scenarioengine.Vehicle +-- scenarioengine.Vehicle.TrailerCoupler
+
+
+scenarioengine.Vehicle +-- scenarioengine.Vehicle.TrailerHitch
+
+
+
+
+@enduml

@@ -94,7 +94,7 @@ namespace scenarioengine
         typedef struct
         {
             DMHeader header;
-            union
+            union // 联合体，所有成员共享内存，由最大成员决定（需考虑内存对齐）
             {
                 DMMSGVehicleStateH      stateH;
                 DMMSGVehicleStateXYH    stateXYH;

@@ -65,7 +65,7 @@ void Story::Print() const
 
 void StoryBoard::Print()
 {
-    LOG_INFO("Storyboard:");
+    LOG_INFO("Storyboard:"); //
     for (size_t i = 0; i < story_.size(); i++)
     {
         story_[i]->Print();
@@ -257,7 +257,7 @@ void Event::Start(double simTime)
                 }
             }
         }
-        // Restart actions
+        // Restart actions 
         action_[i]->Start(adjustedTime);
 
         if (action_[i]->GetBaseType() == OSCAction::BaseType::PRIVATE)

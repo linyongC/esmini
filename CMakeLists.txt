@@ -106,10 +106,10 @@ set(ESMINI_BUILD_VERSION
     CACHE STRING
           "Esmini CI Build Version")
 
-set(CMAKE_BUILD_TYPE
-    "Release"
-    CACHE STRING
-          "build mode")
+# set(CMAKE_BUILD_TYPE
+#     "Release"
+#     CACHE STRING
+#           "build mode")
 
 # ############################### Setting project rules ############################################################
 

@@ -247,7 +247,7 @@ int ScenarioReader::RegisterCatalogDirectory(pugi::xml_node catalogDirChild)
     return 0;
 }
 
-int ScenarioReader::parseOSCHeader()
+int ScenarioReader::parseOSCHeader() // 使用pugixml库解析OpenSCENARIO文件头部信息
 {
     pugi::xml_node hdr_node = osc_root_.child("FileHeader");
 

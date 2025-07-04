@@ -22,6 +22,7 @@ macro(set_special_build_flags)
         if(CMAKE_BUILD_TYPE
            STREQUAL
            "Release")
+            message(WARNING,"Release")
             set(CMAKE_CXX_FLAGS
                 "${CMAKE_CXX_FLAGS} ${CXX_STD_FLAG} -pthread -fPIC -Wl,-strip-all")
         elseif(
@@ -34,9 +35,11 @@ macro(set_special_build_flags)
             CMAKE_BUILD_TYPE
             STREQUAL
             "Debug")
+            message(WARNING,"Debug")
             set(CMAKE_CXX_FLAGS
-                "${CMAKE_CXX_FLAGS} ${CXX_STD_FLAG} -march=native -O0 -pthread -fPIC")
+                "${CMAKE_CXX_FLAGS} ${CXX_STD_FLAG} -g -march=native -O0 -pthread -fPIC")
         else()
+            message(WARNING,"CMAKE_BUILD_TYPE未定义")
             set(CMAKE_CXX_FLAGS
                 "${CMAKE_CXX_FLAGS} ${CXX_STD_FLAG} -pthread -fPIC -Wl,-strip-all")
         endif()

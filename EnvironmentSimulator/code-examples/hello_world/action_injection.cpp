@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     {
         if (state == 0 && SE_GetSimulationTime() > 2.0f)
         {
-            printf("Injecting lane offset action\n");
+            printf("--------------------Injecting lane offset action\n");
             SE_LaneOffsetActionStruct lane_offset;
             lane_offset.id               = 0;       // id of object to perform action
             lane_offset.offset           = -0.45f;  // target offset in m
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
         }
         else if (state == 1 && SE_GetSimulationTime() > 7.0f)
         {
-            printf("Injecting lane change action\n");
+            printf("--------------------Injecting lane change action\n");
             SE_LaneChangeActionStruct lane_change;
             lane_change.id               = 0;     // id of object to perform action
             lane_change.mode             = 1;     // relative (own vehicle)
@@ -67,11 +67,11 @@ int main(int argc, char **argv)
         {
             if (SE_InjectedActionOngoing(5))  // 5 = LAT_LANE_CHANGE
             {
-                printf("Lane change already ongoing, skipping second lane change\n");
+                printf("--------------------Lane change already ongoing, skipping second lane change\n");
             }
             else
             {
-                printf("Injecting lane change action 2\n");
+                printf("--------------------Injecting lane change action 2\n");
                 SE_LaneChangeActionStruct lane_change;
                 lane_change.id               = 0;     // id of object to perform action
                 lane_change.mode             = 1;     // relative (own vehicle)
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
         }
         else if (state == 3 && SE_GetSimulationTime() > 9.5f)  // slightly overlapping lane change action
         {
-            printf("Injecting speed action - soft brake\n");
+            printf("--------------------Injecting speed action - soft brake\n");
             SE_SpeedActionStruct speed;
             speed.id               = 0;     // id of object to perform action
             speed.speed            = 0.0f;  // target speed in m/s
@@ -97,7 +97,7 @@ int main(int argc, char **argv)
         }
         else if (state == 4 && SE_GetSimulationTime() > 11.0f)  // slightly overlapping lane change action
         {
-            printf("Injecting speed action - hard brake\n");
+            printf("--------------------Injecting speed action - hard brake\n");
             SE_SpeedActionStruct speed;
             speed.id               = 0;     // id of object to perform action
             speed.speed            = 0.0f;  // target speed in m/s

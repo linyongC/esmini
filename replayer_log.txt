@@ -1,0 +1,34 @@
+esmini GIT REV: N/A
+esmini GIT TAG: N/A
+esmini GIT BRANCH: N/A
+esmini BUILD VERSION: N/A - client build
+[] [info] Loaded config file: /home/test/linyong/esmini/config.yml (./bin/../config.yml)
+[] [info] replayer options: --res_path ./resources --logfile_path replayer_log.txt --camera_mode orbit --text_scale 1.0 --file sim.dat --config_file_path config.yml --info_text 1 
+[2025-06-24 16:43:50]
+[0.000] [info] Recording sim.dat opened. dat version: 2 odr: e6mini.xodr model: e6mini.osgb
+[0.000] [error] Unsupported geo reference attr: +no_defs
+[0.000] [error] Unsupported object type: rail-pole - interpret as NONE
+[0.000] [error] Unsupported object type: rail-pole - interpret as NONE
+[0.000] [error] Unsupported object type: guide-post - interpret as NONE
+[0.000] [error] Unsupported object type: guide-post - interpret as NONE
+[0.000] [info] Window created at 77,128 with size 800,400
+[0.000] [info] Loaded scenegraph: ./resources/xodr//./../models/e6mini.osgb
+[0.000] [warn] Object ../models/railing-pole.osgb missing length, set to bounding box length 0.10
+[0.000] [warn] Object ../models/railing-pole.osgb missing width, set to bounding box width 0.10
+[0.000] [warn] Object ../models/railing-pole.osgb missing height, set to bounding box height 1.00
+[0.000] [warn] Object ../models/railing-pole.osgb missing length, set to bounding box length 0.10
+[0.000] [warn] Object ../models/railing-pole.osgb missing width, set to bounding box width 0.10
+[0.000] [warn] Object ../models/railing-pole.osgb missing height, set to bounding box height 1.00
+[0.000] [warn] Object ../models/railing.osgb missing length, set to bounding box length 4.00
+[0.000] [warn] Object ../models/railing.osgb missing width, set to bounding box width 0.10
+[0.000] [warn] Object ../models/railing.osgb missing height, set to bounding box height 0.20
+[0.000] [warn] Object ../models/railing.osgb missing length, set to bounding box length 4.00
+[0.000] [warn] Object ../models/railing.osgb missing width, set to bounding box width 0.10
+[0.000] [warn] Object ../models/railing.osgb missing height, set to bounding box height 0.20
+[0.000] [warn] Object ../models/guide-post.osgb missing length, set to bounding box length 0.08
+[0.000] [warn] Object ../models/guide-post.osgb missing width, set to bounding box width 0.13
+[0.000] [warn] Object ../models/guide-post.osgb missing height, set to bounding box height 1.25
+[0.000] [warn] Object ../models/guide-post.osgb missing length, set to bounding box length 0.08
+[0.000] [warn] Object ../models/guide-post.osgb missing width, set to bounding box width 0.13
+[0.000] [warn] Object ../models/guide-post.osgb missing height, set to bounding box height 1.25
+[0.000] [info] Adjusted OverTaker bounding box to model car_red.osgb - xyz: 1.46, 0.00, 0.77 lwh: 5.04, 2.04, 1.49

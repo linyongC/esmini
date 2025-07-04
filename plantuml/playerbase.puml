@@ -1,0 +1,179 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+class ImageCallBack {
+	+func : viewer::ImageCallbackFunc
+	+data : void*
+}
+
+
+namespace scenarioengine {
+	class ScenarioPlayer {
+		+ScenarioPlayer(int argc, char* argv) 
+		+~ScenarioPlayer()
+		+CSV_Log : CSV_Logger*
+		+osiReporter : OSIReporter*
+		+FetchCapturedImagePtr() : OffScreenImage*
+		-state_ : PlayerState
+		-mutex : SE_Mutex
+		+player_init_semaphore : SE_Semaphore
+		+viewer_init_semaphore : SE_Semaphore
+		-thread : SE_Thread
+		+scenarioEngine : ScenarioEngine*
+		+scenarioGateway : ScenarioGateway*
+		+viewerState_ : ViewerState
+		+IsPaused() : bool {query}
+		+IsQuitRequested() : bool {query}
+		-disable_controllers_ : bool
+		-launch_server : bool
+		-osi_updated_ : bool
+		-quit_request : bool
+		-threads : bool
+		+GetParameterName(int index, OSCParameterDeclarations::ParameterType* type) : char*
+		+GetPropertyName(int index, int propertyIndex) : char*
+		+GetPropertyValue(int index, int propertyIndex) : char*
+		+GetVariableName(int index, OSCParameterDeclarations::ParameterType* type) : char*
+		-argv_ : char**
+		+maxStepSize : const double
+		+minStepSize : const double
+		+GetFixedTimestep() : double {query}
+		-fixed_timestep_ : double
+		-trail_dt : double
+		+AddCustomCamera(double x, double y, double z, double h, double p, bool fixed_pos) : int
+		+AddCustomCamera(double x, double y, double z, bool fixed_pos) : int
+		+AddCustomFixedTopCamera(double x, double y, double z, double rot) : int
+		+AddCustomLightSource(double x, double y, double z, double intensity) : int
+		+AddObjectSensor(Object* obj, double pos_x, double pos_y, double pos_z, double heading, double near_dist, double far_dist, double fovH, int maxObj) : int
+		+Frame(bool server_mode) : int
+		+Frame(double timestep_s, bool server_mode) : int
+		+GetCounter() : int {query}
+		+GetNumberOfObjectSensors() : int {query}
+		+GetNumberOfParameters() : int
+		+GetNumberOfProperties(int index) : int
+		+GetNumberOfSensorsAttachedToObject(const Object* obj) : int {query}
+		+GetNumberOfVariables() : int
+		+GetParameterValue(const char* name, void* value) : int
+		+GetParameterValueBool(const char* name, bool& value) : int
+		+GetParameterValueDouble(const char* name, double& value) : int
+		+GetParameterValueInt(const char* name, int& value) : int
+		+GetParameterValueString(const char* name, const char*& value) : int
+		+GetState() : int {query}
+		+GetVariableValue(const char* name, void* value) : int
+		+GetVariableValueBool(const char* name, bool& value) : int
+		+GetVariableValueDouble(const char* name, double& value) : int
+		+GetVariableValueInt(const char* name, int& value) : int
+		+GetVariableValueString(const char* name, const char*& value) : int
+		+Init() : int
+		+InitViewer() : int
+		+LoadParameterDistribution(std::string filename) : int
+		+SaveImagesToFile(int nrOfFrames) : int
+		+SaveImagesToRAM(bool state) : int
+		+ScenarioFrame(double timestep_s, bool keyframe) : int
+		+SetParameterValue(const char* name, const void* value) : int
+		+SetParameterValue(const char* name, int value) : int
+		+SetParameterValue(const char* name, double value) : int
+		+SetParameterValue(const char* name, const char* value) : int
+		+SetParameterValue(const char* name, bool value) : int
+		+SetVariableValue(const char* name, const void* value) : int
+		+SetVariableValue(const char* name, int value) : int
+		+SetVariableValue(const char* name, double value) : int
+		+SetVariableValue(const char* name, const char* value) : int
+		+SetVariableValue(const char* name, bool value) : int
+		-argc_ : int
+		-frame_counter_ : int
+		+GetODRManager() : roadmanager::OpenDrive*
+		+odr_manager : roadmanager::OpenDrive*
+		+exe_path_ : std::string
+		-osi_receiver_addr : std::string
+		-titleString : std::string
+		+player_server_ : std::unique_ptr<PlayerServer>
+		+objCallback : std::vector<ObjCallback>
+		+sensor : std::vector<ObjectSensor*>
+		+sensorFrustum : std::vector<viewer::SensorViewFrustum*>
+		+OSISensorDetection : viewer::OSISensorDetection*
+		+viewer_ : viewer::Viewer*
+		+AddOSIDetection(int object_index) : void
+		+CloseViewer() : void
+		+Draw() : void
+		+InitControllersPostPlayer() : void
+		+InitVehicleModel(Object* obj, viewer::CarModel* model) : void
+		+PrintUsage() : void
+		+RegisterObjCallback(int id, ObjCallbackFunc func, void* data) : void
+		+ScenarioPostFrame() : void
+		+SetFixedTimestep(double timestep) : void
+		+SetOSIFileStatus(bool is_on, const char* filename) : void
+		+SetQuitRequest(bool quit) : void
+		+SetState(PlayerState state) : void
+		+ShowObjectSensors(bool mode) : void
+		+SteeringSensorSetVisible(int object_index, bool value) : void
+		+UpdateCSV_Log() : void
+		+ViewerFrame(bool init) : void
+		+osiReporter : void*
+		+viewer_ : void*
+	}
+
+	enum ScenarioPlayer::PlayerState {
+		PLAYER_STATE_PAUSE
+		PLAYER_STATE_PLAYING
+		PLAYER_STATE_STEP
+		PLAYER_STATE_UNDEFINED
+	}
+
+	enum ScenarioPlayer::RequestControlMode {
+		CONTROL_BY_OSC
+		CONTROL_EXTERNAL
+		CONTROL_HYBRID
+		CONTROL_INTERNAL
+	}
+
+	enum ScenarioPlayer::ViewerState {
+		VIEWER_STATE_DONE
+		VIEWER_STATE_FAILED
+		VIEWER_STATE_NOT_STARTED
+		VIEWER_STATE_STARTED
+	}
+
+	class ObjCallback {
+		+func : ObjCallbackFunc
+		+id : int
+		+data : void*
+	}
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+scenarioengine.ScenarioPlayer *-- scenarioengine.ObjCallback
+
+
+
+
+
+
+/' Nested objects '/
+
+scenarioengine.ScenarioPlayer +-- scenarioengine.ScenarioPlayer.PlayerState
+
+
+scenarioengine.ScenarioPlayer +-- scenarioengine.ScenarioPlayer.RequestControlMode
+
+
+scenarioengine.ScenarioPlayer +-- scenarioengine.ScenarioPlayer.ViewerState
+
+
+
+
+@enduml

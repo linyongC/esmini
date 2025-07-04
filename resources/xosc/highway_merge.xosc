@@ -25,7 +25,7 @@
    </RoadNetwork>
    <Entities>
       <ScenarioObject name="Ego">
-         <CatalogReference catalogName="VehicleCatalog" entryName="car_white"/>
+         <CatalogReference catalogName="VehicleCatalog" entryName="semi_truck"/>
       </ScenarioObject>
       <ScenarioObject name="A1">
          <CatalogReference catalogName="VehicleCatalog" entryName="car_police"/>

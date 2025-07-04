@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Esmini",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/esmini",
+            "args": [
+                "--window",
+                "60",
+                "60",
+                "800",
+                "400",
+                "--osc",
+                "./resources/xosc/cut-in.xosc"
+                // "./resources/xosc/highway_merge.xosc"
+                // "./resources/xosc/cut-in_interactive.xosc"
+                // "./scripts/udp_driver/two_cars_in_open_space.xosc"
+                // "./resources/xosc/cly_lane_change.xosc"
+                // "./EnvironmentSimulator/Unittest/xosc/dummy_mw.xosc",
+                // "--player_server"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            // "preLaunchTask": "C/C++: g++ build active file"
+        }
+    ]
+}

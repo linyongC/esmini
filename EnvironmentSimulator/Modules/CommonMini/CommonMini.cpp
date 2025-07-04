@@ -759,12 +759,12 @@ void SE_sleep(unsigned int msec)
 using namespace std::chrono;
 
 __int64 SE_getSystemTime()
-{
+{   // 获取当前时间距离UNIX时间戳纪元(1970-01-01 00:00:00 UTC)的毫秒数
     return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
 void SE_sleep(unsigned int msec)
-{
+{   // // avoid CPU rush, sleep for a while
     std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<int>(msec)));
 }
 
@@ -1307,7 +1307,7 @@ int OnRequestShowHelpOrVersion(int argc, char** argv, SE_Options& opt)
             retVal += 2;
         }
     }
-    return retVal;
+    return retVal; // return 1 for help, 2 for version, 3 for both else return 0
 }
 
 void PrintOSGUsage()
@@ -2198,10 +2198,10 @@ void SE_Options::ApplyDefaultValues()
 }
 
 SE_Option* SE_Options::GetOption(std::string opt)
-{
+{   // 通过opt_str在哈希表中查找option； C++17 引入的 ‌带初始化的 if 语句‌（init-if）
     if (auto itr = option_.find(opt); itr != option_.end())
     {
-        return &itr->second;
+        return &itr->second; // 返回找到的option
     }
     return nullptr;
 }

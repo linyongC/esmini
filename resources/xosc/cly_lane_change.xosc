@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Two cars approaching from opposite directions. Both changing lane cross road -->
+<!-- reference line. Purpose is to validate esmini lane change functionality.     -->
+<OpenSCENARIO>
+    <FileHeader revMajor="1" revMinor="0" date="2019-06-09T10:00:00" description="Cut-in" author="esmini-team"/>
+    <ParameterDeclarations>
+        <ParameterDeclaration name="HostVehicle" parameterType="string" value="car_white"/>
+        <ParameterDeclaration name="EgoStartS" parameterType="double" value="50"/>
+        <ParameterDeclaration name="TargetVehicle" parameterType="string" value="car_red"/>
+        <ParameterDeclaration name="DummyParameter" parameterType="double" value="2"/>
+        <ParameterDeclaration name="DummyParameter2" parameterType="boolean" value="true"/>
+        <ParameterDeclaration name="DummyParameter3" parameterType="string" value="lane_change_param"/>
+    </ParameterDeclarations>
+    <CatalogLocations>
+        <VehicleCatalog>
+            <Directory path="../xosc/Catalogs/Vehicles"/>
+        </VehicleCatalog>
+    </CatalogLocations>
+    <RoadNetwork>
+        <LogicFile filepath="../xodr/jolengatan.xodr"/>
+        <SceneGraphFile filepath="../models/jolengatan.osgb"/>
+    </RoadNetwork>
+    <Entities>
+        <ScenarioObject name="Ego">
+            <CatalogReference catalogName="VehicleCatalog" entryName="$HostVehicle"/>
+        </ScenarioObject>
+    </Entities>
+    <Storyboard>
+        <Init>
+            <Actions>
+                <Private entityRef="Ego">
+                    <PrivateAction>
+                        <TeleportAction>
+                            <Position>
+                                <LanePosition roadId="1" laneId="-1" offset="0" s="50"/>
+                            </Position>
+                        </TeleportAction>
+                    </PrivateAction>
+                    <PrivateAction>
+                        <LongitudinalAction>
+                            <SpeedAction>
+                                <SpeedActionDynamics dynamicsShape="step" dynamicsDimension="time" value="0.0"/>
+                                <SpeedActionTarget>
+                                    <AbsoluteTargetSpeed value="20"/>
+                                </SpeedActionTarget>
+                            </SpeedAction>
+                        </LongitudinalAction>
+                    </PrivateAction>
+                </Private>
+            </Actions>
+        </Init>
+        <Story name="Lane Change Story">
+            <ParameterDeclarations>
+                <ParameterDeclaration parameterType="string" name="owner" value="Ego"/>
+            </ParameterDeclarations>
+            <Act name="Lane Change Act">
+                <ManeuverGroup maximumExecutionCount="1" name="Lane Change MG">
+                    <Actors selectTriggeringEntities="false">
+                        <EntityRef entityRef="$owner"/>
+                    </Actors>
+                    <Maneuver name="Lane Change Maneuver">
+                        <Event name="Lane Change Event" priority="overwrite">
+                            <Action name="Lane Change Action">
+                                <PrivateAction>
+                                    <LateralAction>
+                                        <LaneChangeAction>
+                                            <LaneChangeActionDynamics dynamicsShape="sinusoidal" value="2" dynamicsDimension="time"/>
+                                            <LaneChangeTarget>
+                                                <RelativeTargetLane entityRef="Ego" value="1"/>
+                                            </LaneChangeTarget>
+                                        </LaneChangeAction>
+                                    </LateralAction>
+                                </PrivateAction>
+                            </Action>
+                            <StartTrigger>
+                                <ConditionGroup>
+                                    <Condition name="Lane Change Event Condition" delay="0" conditionEdge="rising">
+                                        <ByValueCondition>
+                                            <SimulationTimeCondition value="4" rule="greaterThan"/>
+                                        </ByValueCondition>
+                                    </Condition>
+                                </ConditionGroup>
+                            </StartTrigger>
+                        </Event>
+                        <Event name="EgoGoOffRoadEvent" priority="parallel">
+                            <Action name="EgoGoOffRoadAction">
+                                <PrivateAction>
+                                    <LateralAction>
+                                        <LaneOffsetAction continuous="false">
+                                            <LaneOffsetActionDynamics dynamicsShape="sinusoidal" maxLateralAcc="3.5"/>
+                                            <LaneOffsetTarget>
+                                                <AbsoluteTargetLaneOffset value="8"/>
+                                            </LaneOffsetTarget>
+                                        </LaneOffsetAction>
+                                    </LateralAction>
+                                </PrivateAction>
+                            </Action>
+                            <StartTrigger>
+                                <ConditionGroup>
+                                    <Condition name="EgoGoOffRoadCondition" delay="1" conditionEdge="rising">
+                                        <ByValueCondition>
+                                            <StoryboardElementStateCondition storyboardElementType="event" storyboardElementRef="Lane Change Event" state="endTransition"/>
+                                        </ByValueCondition>
+                                    </Condition>
+                                </ConditionGroup>
+                            </StartTrigger>
+                        </Event>
+                        <Event name="EgoGoOnRoadEvent" priority="overwrite">
+                            <Action name="EgoGoOnRoadAction">
+                                <PrivateAction>
+                                    <LateralAction>
+                                        <LaneChangeAction>
+                                            <LaneChangeActionDynamics dynamicsShape="cubic" value="3" dynamicsDimension="time"/>
+                                            <LaneChangeTarget>
+                                                <AbsoluteTargetLane value="1"/>
+                                            </LaneChangeTarget>
+                                        </LaneChangeAction>
+                                    </LateralAction>
+                                </PrivateAction>
+                            </Action>
+                            <StartTrigger>
+                                <ConditionGroup>
+                                    <Condition name="EgoGoOnRoadCondition" delay="0" conditionEdge="rising">
+                                        <ByEntityCondition>
+                                            <TriggeringEntities triggeringEntitiesRule="any">
+                                                <EntityRef entityRef="Ego"/>
+                                            </TriggeringEntities>
+                                            <EntityCondition>
+                                                <OffroadCondition duration="2.5"/>
+                                            </EntityCondition>
+                                        </ByEntityCondition>
+                                    </Condition>
+                                </ConditionGroup>
+                            </StartTrigger>
+                        </Event>
+                    </Maneuver>
+                </ManeuverGroup>
+                <StartTrigger>
+                    <ConditionGroup>
+                        <Condition name="LaneChangeActStart" delay="0" conditionEdge="risingOrFalling">
+                            <ByValueCondition>
+                                <SimulationTimeCondition value="0" rule="greaterThan"/>
+                            </ByValueCondition>
+                        </Condition>
+                    </ConditionGroup>
+                </StartTrigger>
+            </Act>
+        </Story>
+        <StopTrigger>
+            <ConditionGroup>
+                <Condition name="QuitCondition" delay="3" conditionEdge="rising">
+                    <ByValueCondition>
+                        <StoryboardElementStateCondition storyboardElementType="event" storyboardElementRef="EgoGoOnRoadEvent" state="endTransition"/>
+                    </ByValueCondition>
+                </Condition>
+            </ConditionGroup>
+        </StopTrigger>
+    </Storyboard>
+</OpenSCENARIO>

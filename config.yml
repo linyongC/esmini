@@ -1,5 +1,7 @@
 esmini:
-  window: 60 60 800 400
+  window: 50 50 1200 400
+  # osc: ./resources/xosc/highway_merge.xosc
+  osc: ./resources/xosc/cut-in_interactive.xosc
 replayer:
   window: 60 60 800 400
   res_path: ./resources

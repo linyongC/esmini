@@ -16,7 +16,7 @@
    </CatalogLocations>
    <RoadNetwork>
       <LogicFile filepath="../xodr/multi_intersections.xodr"/>
-      <SceneGraphFile filepath="../models/multi_intersections.osgb"/>
+      <!-- <SceneGraphFile filepath="../models/multi_intersections.osgb"/> -->
    </RoadNetwork>
    <Entities>
       <ScenarioObject name="Ego">

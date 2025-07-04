@@ -28,6 +28,9 @@ namespace fs = std::experimental::filesystem;
 
 using namespace scenarioengine;
 
+//典型的单例模式(Singleton Pattern)，通过静态局部变量保证线程安全的全局唯一实例访问
+//返回引用(&)避免拷贝构造，直接操作唯一实例
+//通过类名直接访问静态方法(::Inst())，无需实例化对象
 OSCParameterDistribution& OSCParameterDistribution::Inst()
 {
     static OSCParameterDistribution instance_;
@@ -277,7 +280,7 @@ unsigned int OSCParameterDistribution::GetNumPermutations()
     }
 
     for (size_t i = 0; i < param_list_.size(); i++)
-    {
+    {   // Calculate number of permutations，所有参数的排列组合
         n *= static_cast<unsigned int>(param_list_[i].size());
     }
 

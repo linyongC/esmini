@@ -355,7 +355,7 @@ bool Trigger::Evaluate(double sim_time)
 
     if (result)
     {
-        // Log
+        // Log condition trigger
         LOG_INFO("Trigger /------------------------------------------------");
         for (size_t i = 0; i < conditionGroup_.size(); i++)
         {

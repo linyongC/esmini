@@ -1,0 +1,30 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ build active file",
+            "command": "cmake",
+            "args": [
+                "--build",
+                ".",
+                "--config",
+                "Debug",
+                "--target",
+                "install"
+            ],
+            // switch to workspace folder to run cmake
+            "options": { 
+                "cwd": "${workspaceFolder}/build"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Build using CMake in Debug Mode."
+        }
+    ],
+    "version": "2.0.0"
+}

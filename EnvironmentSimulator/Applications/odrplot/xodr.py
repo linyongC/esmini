@@ -2,6 +2,8 @@
 import sys
 import csv
 import math
+import matplotlib
+matplotlib.use('TkAgg') 
 import matplotlib.pyplot as plt
 
 H_SCALE = 10

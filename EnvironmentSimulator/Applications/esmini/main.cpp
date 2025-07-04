@@ -42,9 +42,9 @@ static int execute_scenario(int argc, char* argv[])
 {
     __int64     time_stamp = 0;
     int         retval     = 0;
-    SE_Options& opt        = SE_Env::Inst().GetOptions();
+    SE_Options& opt        = SE_Env::Inst().GetOptions(); // 实例化引用，全局唯一，无需传参，声明即可使用
 
-    std::unique_ptr<ScenarioPlayer> player;
+    std::unique_ptr<ScenarioPlayer> player; // 声明一个空指针，未绑定任何ScenarioPlayer对象
 
     // Setup signal handler to catch Ctrl-C
     signal(SIGINT, signal_handler);
@@ -57,6 +57,8 @@ static int execute_scenario(int argc, char* argv[])
             return -1;
         }
 
+        printf("\n######################################\n");
+        // opt.PrintUsage();
         if (opt.GetOptionSet("return_nr_permutations"))
         {
             // Skip scenario, return immediately
@@ -92,11 +94,13 @@ static int execute_scenario(int argc, char* argv[])
             dt = player->GetFixedTimestep();
         }
         else
-        {
+        {   // steptime在minStepSize(0.001)和maxStepSize(0.1)之间,返回实际每一帧耗时，单位是秒
             dt = SE_getSimTimeStep(time_stamp, player->minStepSize, player->maxStepSize);
         }
 
         retval = player->Frame(dt);
+        // printf("\n######################################\n");
+        // printf("frame dt: %.10fs\n",dt);        
 
 #ifdef _USE_IMPLOT
         if (plot != nullptr && plot->IsModeSynchronuous())
@@ -124,7 +128,7 @@ static int execute_scenario(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
-    OSCParameterDistribution& dist   = OSCParameterDistribution::Inst();
+    OSCParameterDistribution& dist   = OSCParameterDistribution::Inst(); // 实例化引用
     int                       retval = 0;
 
     do

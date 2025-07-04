@@ -329,7 +329,7 @@ StoryBoardElement::~StoryBoardElement()
 
 void StoryBoardElement::SetState(StoryBoardElement::State state)
 {
-    if (GetCurrentState() != state)
+    if (GetCurrentState() != state) //
     {
         LOG_INFO("{} {} -> {} -> {}", name_, state2str(GetCurrentState()), transition2str(GetCurrentTransition()), state2str(state));
 

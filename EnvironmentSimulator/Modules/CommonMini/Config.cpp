@@ -65,7 +65,7 @@ namespace esmini::common
     {
         ParseAndProcessConfigFiles();
         return std::make_pair(std::ref(argc_), std::ref(argv_));
-    }
+    }   // 创建一个 std::pair 对象，其中 first 和 second 成员分别是对 argc_ 和 argv_ 的引用
 
     std::string Config::MakeDefaultConfigFilePath() const
     {

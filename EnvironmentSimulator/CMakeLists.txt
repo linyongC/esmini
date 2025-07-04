@@ -27,17 +27,18 @@ add_subdirectory(Libraries/esminiRMLib)
 # ############################### Building Applications ################################################################
 
 add_subdirectory(Applications/esmini)
-add_subdirectory(Applications/esmini-dyn)
-if(USE_OSG)
-    add_subdirectory(Applications/odrviewer)
-endif(USE_OSG)
-if(BUILD_ODRPLOT)
-    add_subdirectory(Applications/odrplot)
-endif(BUILD_ODRPLOT)
-add_subdirectory(Applications/replayer)
-if(BUILD_EXAMPLES)
-    add_subdirectory(code-examples)
-endif(BUILD_EXAMPLES)
+# 25.06.26 comment out uncessary applications for better debug(first build last 4min)
+# add_subdirectory(Applications/esmini-dyn)
+# if(USE_OSG)
+#     add_subdirectory(Applications/odrviewer)
+# endif(USE_OSG)
+# if(BUILD_ODRPLOT)
+#     add_subdirectory(Applications/odrplot)
+# endif(BUILD_ODRPLOT)
+# add_subdirectory(Applications/replayer)
+# if(BUILD_EXAMPLES)
+#     add_subdirectory(code-examples)
+# endif(BUILD_EXAMPLES)
 # ############################### Building Unittest ####################################################################
 
 if((NOT
@@ -65,11 +66,11 @@ set_folder(
     ScenarioEngine
     ${ModulesFolder})
 
-if(USE_OSI)
-    set_folder(
-        osireceiver
-        ${ApplicationsFolder})
-endif()
+# if(USE_OSI)
+#     set_folder(
+#         osireceiver
+#         ${ApplicationsFolder})
+# endif()
 set_folder(
     PlayerBase
     ${ModulesFolder})
@@ -88,26 +89,26 @@ set_folder(
 set_folder(
     esmini
     ${ApplicationsFolder})
-set_folder(
-    esmini-dyn
-    ${ApplicationsFolder})
-set_folder(
-    dat2csv
-    ${ApplicationsFolder})
-if(BUILD_ODRPLOT)
-    set_folder(
-        odrplot
-        ${ApplicationsFolder})
-endif(BUILD_ODRPLOT)
-if(BUILD_REPLAYER)
-    set_folder(
-        replayer
-        ${ApplicationsFolder})
-endif(BUILD_REPLAYER)
+# set_folder(
+#     esmini-dyn
+#     ${ApplicationsFolder})
+# set_folder(
+#     dat2csv
+#     ${ApplicationsFolder})
+# if(BUILD_ODRPLOT)
+#     set_folder(
+#         odrplot
+#         ${ApplicationsFolder})
+# endif(BUILD_ODRPLOT)
+# if(BUILD_REPLAYER)
+#     set_folder(
+#         replayer
+#         ${ApplicationsFolder})
+# endif(BUILD_REPLAYER)
 if(USE_OSG)
-    set_folder(
-        odrviewer
-        ${ApplicationsFolder})
+    # set_folder(
+    #     odrviewer
+    #     ${ApplicationsFolder})
     set_folder(
         ViewerBase
         ${ModulesFolder})

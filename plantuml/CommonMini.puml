@@ -1,0 +1,427 @@
+@startuml
+
+
+
+
+
+/' Objects '/
+
+class CSV_Logger {
+	-CSV_Logger()
+	-~CSV_Logger()
+	+{static} Inst() : CSV_Logger&
+	-callback_ : FuncPtr
+	-data_index_ : int
+	-file_ : std::ofstream
+	+LogEntryHeader(double timestamp) : void
+	+LogVehicleData(bool isendline, char const* name, int id, double speed, double wheel_angle, double wheel_rot, double bb_x, double bb_y, double bb_z, double bb_length, double bb_width, double bb_height, double posX, double posY, double posZ, double velX, double velY, double velZ, double accX, double accY, double accZ, double distance_road, double distance_lanem, int lane_id, double lane_offset, double heading, double heading_rate, double heading_angle, double heading_angle_driving_direction, double pitch, double curvature, char const* collisions) : void
+	+Open(std::string scenario_filename, int numvehicles, std::string csv_filename) : void
+	+SetCallback(FuncPtr callback) : void
+}
+
+
+class DampedSpring {
+	+DampedSpring()
+	+DampedSpring(double startValue, double targetValue, double tension, double damping)
+	+DampedSpring(double startValue, double targetValue, double tension)
+	-critical_ : bool
+	+GetA() : double {query}
+	+GetTargetValue() : double {query}
+	+GetV() : double {query}
+	+GetValue() : double {query}
+	-a_ : double
+	-d_ : double
+	-t_ : double
+	-v_ : double
+	-x0_ : double
+	-x_ : double
+	+SetDamping(double damping) : void
+	+SetOptimalDamping() : void
+	+SetTargetValue(double targetValue) : void
+	+SetTension(double tension) : void
+	+SetV(double value) : void
+	+SetValue(double value) : void
+	+Update(double timeStep) : void
+}
+
+
+class Logger {
+	-Logger()
+	-~Logger()
+	-callback_ : FuncPtr
+	+{static} Inst() : Logger&
+	-mutex_ : SE_Mutex
+	+IsCallbackSet() : bool {query}
+	+IsFileOpen() : bool {query}
+	-time_ : double*
+	-file_ : std::ofstream
+	+CloseLogFile() : void
+	+Log(bool quit, bool trace, const char* file, const char* func, int line, const char* format) : void
+	+LogVersion() : void
+	+OpenLogfile(std::string filename) : void
+	+SetCallback(FuncPtr callback) : void
+	+SetTimePtr(double* timePtr) : void
+}
+
+
+class SE_Color {
+	+{static} float(& ColorStr2RBG ( std::string color_str ))
+	+{static} float(& Color2RBG ( Color color_enum ))
+	+{static} >(Color::COUNT) : float rgb_values_ [ static_cast<size_t
+	+{static} ColorStr2Idx(std::string color_str) : int
+	+{static} str2enum_ : static const std::map<std::string, Color>
+	+{static} >(Color::COUNT) : std::string color_strings_ [ static_cast<size_t
+	+{static} ColorIdx2Str(Color color_idx) : std::string&
+}
+
+
+class SE_Env {
+	+SE_Env()
+	-ghost_mode_ : GhostMode
+	+{static} Inst() : SE_Env&
+	-opt : SE_Options
+	+GetOptions() : SE_Options&
+	-rand_ : SE_Rand
+	+GetRand() : SE_Rand&
+	-systemTime_ : SE_SystemTime
+	+GetCollisionDetection() : bool {query}
+	+GetSaveImagesToRAM() : bool {query}
+	+IsOSITimeStampSet() : bool {query}
+	-collisionDetection_ : bool
+	-saveImagesToRAM_ : bool
+	+GetGhostHeadstart() : double {query}
+	+GetOSIMaxLateralDeviation() : double {query}
+	+GetOSIMaxLongitudinalDistance() : double {query}
+	+GetSystemTime() : double {query}
+	-ghost_headstart_ : double
+	-osiMaxLateralDeviation_ : double
+	-osiMaxLongitudinalDistance_ : double
+	+AddPath(std::string path) : int
+	+GetGhostMode() : int {query}
+	-entity_model_map_ : std::map<int, std::string>
+	+GetDatFilePath() : std::string {query}
+	+GetLogFilePath() : std::string {query}
+	+GetModelFilenameById(int model_id) : std::string
+	-datFilePath_ : std::string
+	-logFilePath_ : std::string
+	-paths_ : std::vector<std::string>
+	+GetPaths() : std::vector<std::string>&
+	+GetOSITimeStamp() : unsigned long long {query}
+	-osiTimeStamp_ : unsigned long long
+	+ClearModelFilenames() : void
+	+ClearPaths() : void
+	+ResetOSITimeStamp() : void
+	+SaveImagesToRAM(bool state) : void
+	+SetCollisionDetection(bool enable) : void
+	+SetDatFilePath(std::string datFilePath) : void
+	+SetGhostHeadstart(double headstart_time) : void
+	+SetGhostMode(GhostMode mode) : void
+	+SetOSIMaxLateralDeviation(double maxLateralDeviation) : void
+	+SetOSIMaxLongitudinalDistance(double maxLongitudinalDistance) : void
+	+SetOSITimeStamp(unsigned long long timestamp) : void
+}
+
+
+class SE_Mutex {
+	+SE_Mutex()
+	-mutex_ : std::mutex
+	+Lock() : void
+	+Unlock() : void
+	-mutex_ : void*
+}
+
+
+class SE_Option {
+	+SE_Option(std::string opt_str, std::string opt_desc, std::string opt_arg, std::string default_value, bool autoApply, bool isSingleValueOption)
+	+autoApply_ : bool
+	+isSingleValueOption_ : bool
+	+persistent_ : bool
+	+set_ : bool
+	+default_value_ : std::string
+	+opt_arg_ : std::string
+	+opt_desc_ : std::string
+	+opt_str_ : std::string
+	+arg_value_ : std::vector<std::string>
+	+Usage() : void {query}
+}
+
+
+class SE_Options {
+	-GetOption(std::string opt) : SE_Option*
+	+GetOptionSet(std::string opt) : bool
+	+HasUnknownArgs() : bool {query}
+	+IsInOriginalArgs(std::string opt) : bool
+	+IsOptionArgumentSet(std::string opt) : bool
+	+ChangeOptionArg(std::string opt, std::string new_value, int index) : int
+	+ClearOption(const std::string& opt) : int
+	+ParseArgs(int argc, const char* const argv) : int
+	+SetOptionValue(std::string opt, std::string value, bool add, bool persistent) : int
+	+UnsetOption(const std::string& opt) : int
+	+GetOptionArg(std::string opt, int index) : std::string
+	+GetSetOptionsAsStr() : std::string {query}
+	-app_name_ : std::string
+	+GetAllOptions() : std::unordered_map<std::string , SE_Option>& {query}
+	-option_ : std::unordered_map<std::string, SE_Option>
+	-optionOrder_ : std::vector<SE_Option*>
+	+GetOptionArgs(std::string opt) : std::vector<std::string>
+	-originalArgs_ : std::vector<std::string>
+	-unknown_args_ : std::vector<std::string>
+	+GetOriginalArgs() : std::vector<std::string>&
+	+AddOption(std::string opt_str, std::string opt_desc, std::string opt_arg, std::string default_value, bool autoApply, bool isSingleValueOption) : void
+	+ApplyDefaultValues() : void
+	+PrintUnknownArgs(std::string message) : void {query}
+	+PrintUsage() : void
+	+Reset() : void
+}
+
+
+class SE_Rand {
+	+SE_Rand()
+	+GetReal() : double
+	+GetRealBetween(double min, double max) : double
+	+GetNumberBetween(int min, int max) : int
+	-gen_ : std::mt19937
+	+GetGenerator() : std::mt19937&
+	+GetSeed() : unsigned int {query}
+	-seed_ : unsigned int
+	+SetSeed(unsigned int seed) : void
+}
+
+
+class SE_Semaphore {
+	+SE_Semaphore()
+	-flag : bool
+	-cv : std::condition_variable
+	-mtx : std::mutex
+	+Release() : void
+	+Set() : void
+	+Wait() : void
+}
+
+
+class SE_SimulationTimer {
+	+SE_SimulationTimer()
+	+Expired(double timestamp_s) : bool {query}
+	+Started() : bool
+	+Elapsed(double timestamp_s) : double {query}
+	+GetDuration() : double {query}
+	+Remaining(double timestamp_s) : double {query}
+	+duration_ : double
+	+start_time_ : double
+	+Reset() : void
+	+Start(double timestamp_s, double duration) : void
+}
+
+
+class SE_SystemTime {
+	+SE_SystemTime()
+	+start_time_ : __int64
+	+GetS() : double {query}
+	+Reset() : void
+}
+
+
+class SE_SystemTimer {
+	+SE_SystemTimer()
+	+start_time_ : __int64
+	+Expired() : bool {query}
+	+Started() : bool {query}
+	+Elapsed() : double {query}
+	+Remaining() : double {query}
+	+duration_ : double
+	+Reset() : void
+	+SetDuration(double duration) : void
+	+Start() : void
+	+Start(double duration) : void
+}
+
+
+class SE_Thread {
+	+SE_Thread()
+	+SE_Thread()
+	+~SE_Thread()
+	-thread_ : std::thread
+	+Start(void (* ) ( void* ) func_ptr, void* arg) : void
+	+Wait() : void
+	-thread_ : void*
+}
+
+
+class SE_Vector {
+	+SE_Vector()
+	+SE_Vector(double x, double y)
+	+Rotate(double angle) : SE_Vector {query}
+	+operator+(SE_Vector const& p) : SE_Vector {query}
+	+operator-(SE_Vector const& p) : SE_Vector {query}
+	+operator+=(SE_Vector const& p) : SE_Vector&
+	+operator-=(SE_Vector const& p) : SE_Vector&
+	+Cross(const SE_Vector& vec) : double {query}
+	+Dot(const SE_Vector& corner) : double {query}
+	+GetLength() : double
+	+x() : double {query}
+	-x_ : double
+	+y() : double {query}
+	-y_ : double
+	+Normalize() : void
+	+Set(double x, double y) : void
+	+SetLength(double length) : void
+	+SetX(double x) : void
+	+SetY(double y) : void
+}
+
+
+enum ControlActivationMode {
+	OFF
+	ON
+	UNDEFINED
+}
+
+
+enum ControlDomainMasks {
+	DOMAIN_MASK_ALL
+	DOMAIN_MASK_ANIM
+	DOMAIN_MASK_LAT
+	DOMAIN_MASK_LAT_AND_LONG
+	DOMAIN_MASK_LIGHT
+	DOMAIN_MASK_LONG
+	DOMAIN_MASK_NONE
+}
+
+
+enum ControlDomains {
+	COUNT
+	DOMAIN_ANIM
+	DOMAIN_LAT
+	DOMAIN_LIGHT
+	DOMAIN_LONG
+}
+
+
+enum ControlOperationMode {
+	MODE_ADDITIVE
+	MODE_NONE
+	MODE_OVERRIDE
+}
+
+
+enum EntityScaleMode {
+	BB_TO_MODEL
+	MODEL_TO_BB
+	NONE
+}
+
+
+enum FollowingMode {
+	FOLLOW
+	POSITION
+}
+
+
+enum GhostMode {
+	NORMAL
+	RESTART
+	RESTARTING
+}
+
+
+enum KeyType {
+	KEY_Control_L
+	KEY_Control_R
+	KEY_Down
+	KEY_Escape
+	KEY_Left
+	KEY_Return
+	KEY_Right
+	KEY_Shift_L
+	KEY_Shift_R
+	KEY_Space
+	KEY_Up
+}
+
+
+enum ModKeyMask {
+	MODKEY_CTRL
+	MODKEY_LEFT_CTRL
+	MODKEY_LEFT_SHIFT
+	MODKEY_RIGHT_CTRL
+	MODKEY_RIGHT_SHIFT
+	MODKEY_SHIFT
+}
+
+
+enum PixelFormat {
+	BGR
+	RGB
+	UNSPECIFIED
+}
+
+
+enum SE_Color::Color {
+	BLACK
+	BLUE
+	COUNT
+	DARK_GRAY
+	GRAY
+	GREEN
+	LIGHT_GRAY
+	ORANGE
+	RED
+	UNDEFINED
+	VIOLET
+	WHITE
+	YELLOW
+}
+
+
+class OffScreenImage {
+	+height : int
+	+pixelFormat : int
+	+pixelSize : int
+	+width : int
+	+data : unsigned char*
+}
+
+
+
+
+
+/' Inheritance relationships '/
+
+
+
+
+/' Aggregation relationships '/
+
+Logger *-- SE_Mutex
+
+
+SE_Env *-- GhostMode
+
+
+SE_Env *-- SE_Options
+
+
+SE_Env *-- SE_Rand
+
+
+SE_Env *-- SE_SystemTime
+
+
+SE_Options o-- SE_Option
+
+
+SE_Options *-- SE_Option
+
+
+
+
+
+
+/' Nested objects '/
+
+SE_Color +-- SE_Color::Color
+
+
+
+
+@enduml
